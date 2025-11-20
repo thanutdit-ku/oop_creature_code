@@ -105,25 +105,7 @@ if __name__ == "__main__":
     dummy.attack(hawk)
     print()
     print("=== Tests Completed ===")
-    print()class Creature:
-    def __init__(self, name, hp, attack_power):
-        self.name = name
-        self.hp = hp
-        self.attack_power = attack_power
-
-    def attack(self, target):
-        if not self.is_alive():
-            print(f"{self.name} cannot attack because it is defeated.")
-            return
-
-        print(f"{self.name} attacks {target.name} for {self.attack_power} damage!")
-        target.hp -= self.attack_power
-
-    def is_alive(self):
-        return self.hp > 0
-
-    def __str__(self):
-        return f"{self.name} (HP: {self.hp})"
+    print()
 
 # ===============================
 # SwimmingCreature Branch
@@ -146,9 +128,30 @@ class SwimmingCreature(Creature):
         print(f"{self.name} performs an aerial attack on {target.name} for {self.attack_power} damage!")
         target.hp -= self.attack_power
         if target.hp < 0:
-            target = 0
+            target.hp = 0
         print(f"{target.name} HP is now {target.hp}")
 
+# ===============================
+# FireCreature Branch
+# ===============================
+
+class FireCreature(Creature):
+    def __init__(self, name, hp, attack_power):
+        super().__init__(name, hp, attack_power)
+        self.fire_level = 0
+    
+    def emit_fire(self, new_fire_level):
+        self.fire_level = new_fire_level
+        print(f"{self.name} fuels their fire up to {new_fire_level}.")
+
+    def attack(self, target):
+        if not self.is_alive():
+            print(f"{self.name} cannot attack because it is defeated.")
+            return
+
+        print(f"{self.name} ignites the battlefield with the power of {self.fire_level}!")
+        print(f"It burns {target.name} for {self.attack_power} damage!")
+        target.hp -= self.attack_power
 if __name__ == "__main__":
     print("=== Creature Class Tests ===\n")
 
@@ -210,3 +213,16 @@ if __name__ == "__main__":
     print(f"Dummy HP should be 33 → Actual: {dummy.hp}")
     print()
     print("=== Tests Completed ===")
+    print()
+
+    print("=== FireCreature Tests ===\n")
+    ember = FireCreature("Sentient Ember", 60, 15)
+    ember.emit_fire(90)
+    print(f"Fire level should be 90 → Actual: {ember.fire_level}")
+
+    dummy = Creature("Practice Dummy", 40, 0)
+    ember.attack(dummy)
+    print(f"Dummy HP should be 25 → Actual: {dummy.hp}")
+    print()
+    print("=== Tests Completed ===")
+    print()
